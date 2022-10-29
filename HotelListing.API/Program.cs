@@ -18,7 +18,7 @@ builder.Services.AddCors(options =>
         b.AllowAnyMethod();
     });
 
-   
+   //updated
 
 });
 builder.Host.UseSerilog((context, loggerConfig) =>
