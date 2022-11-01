@@ -3,8 +3,8 @@
 namespace HotelListing.API.Contracts
 {
    
-    public interface ICountriesRepository : IGenericRepository<CountryDao>
+    public interface ICountriesRepository: IGenericRepository<CountryDao>
     {
-
+        Task<CountryDao> GetDetails(int id);
     }
 }
