@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using HotelListing.API.Data.Configurations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HotelListing.API.Data
 {

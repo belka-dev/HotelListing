@@ -3,14 +3,15 @@ using HotelListing.API.Data;
 using HotelListing.API.Mapper;
 using HotelListing.API.Repository;
 using Microsoft.EntityFrameworkCore;
+using HotelListing.API.Startup;
 using Serilog;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
+//configuring services 
+builder.Services.RegisterServices();
 //adding connection string 
+
 
 var connectionString = builder.Configuration.GetConnectionString("HotelListingDbConnectionString");
 
@@ -18,39 +19,22 @@ builder.Services.AddDbContext<HotelListingDbContext>(options => {
     
     options.UseSqlServer(connectionString); 
 });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddCors(options =>
-{
 
-    options.AddPolicy("AllowAll", b =>
-    {
-        b.AllowAnyHeader();
-        b.AllowAnyOrigin();
-        b.AllowAnyMethod();
-    });
-
-   //updated
-
-});
-
-builder.Services.AddAutoMapper(typeof(MapperConfig));
-builder.Services.AddScoped (typeof(IGenericRepository<>), typeof(GenericRepository<>));
-builder.Services.AddScoped <ICountriesRepository, CountriesRepository>();
 
 builder.Host.UseSerilog((context, loggerConfig) =>
 
 loggerConfig.WriteTo.Console().ReadFrom.Configuration(context.Configuration));
+//--- updating Identity
+
+builder.Services.AddIdentityCore<ApiUser>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<HotelListingDbContext>();
+  
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.ConfigureSwagger();
 
 app.UseHttpsRedirection();
 
