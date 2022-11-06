@@ -322,3 +322,4 @@ C:\Users\belkacem.hadid\source\repos\HotelListing\HotelListing.API\bin\Debug\net
 C:\Users\belkacem.hadid\source\repos\HotelListing\HotelListing.API\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 C:\Users\belkacem.hadid\source\repos\HotelListing\HotelListing.API\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
 C:\Users\belkacem.hadid\source\repos\HotelListing\HotelListing.API\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\belkacem.hadid\source\repos\HotelListing\HotelListing.API\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

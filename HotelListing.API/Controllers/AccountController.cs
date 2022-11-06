@@ -10,9 +10,11 @@ namespace HotelListing.API.Controllers
     public class AccountController : ControllerBase
     {
         IAuthManager _authManager;
-        public AccountController(IAuthManager authManager)
+        ILogger<AccountController> _logger;
+        public AccountController(IAuthManager authManager, ILogger<AccountController> logger)
         {
-            _authManager=authManager;
+            _authManager = authManager;
+            _logger = logger;
         }
         //api/account/register
         [HttpPost]
@@ -20,18 +22,29 @@ namespace HotelListing.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> Register(ApiUserDto apiUserDto)
+        public async Task<ActionResult> Register([FromBody] ApiUserDto apiUserDto)
         {
-            var errors = await _authManager.Regiter(apiUserDto);
-            if (errors.Any())
+          
+         
+            _logger.LogInformation($"REGISTRZATION ATTEMPT FOR {apiUserDto.Email}");
+            try
             {
-                foreach(var error in errors)
+                var errors = await _authManager.Regiter(apiUserDto);
+                if (errors.Any())
                 {
-                    ModelState.AddModelError(error.Code, error.Description);
+                    foreach (var error in errors)
+                    {
+                        ModelState.AddModelError(error.Code, error.Description);
+                    }
+                    return BadRequest(ModelState);
                 }
-                return BadRequest(ModelState);
-            }
-            return Ok(apiUserDto);
+                return Ok(apiUserDto);
+            } catch(Exception ex)
+            {
+                _logger.LogError(ex, $"error happened in {nameof(Register)} - user Registration");
+                return Problem($"error happened in {nameof(Register)} - user Registration", statusCode: 500);
+            }   
+               
         }
         //api/account/register
         [HttpPost]
@@ -41,12 +54,12 @@ namespace HotelListing.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> Register(LogintDto logintDto)
         {
-            var isValidUser = await _authManager.Login(logintDto);
-            if (!isValidUser)
+            var authreponse = await _authManager.Login(logintDto);
+            if (authreponse == null)
             {
                 return Unauthorized(); 
             }
-            return Ok();
+            return Ok(authreponse);
         }
     }
 }

@@ -8,6 +8,8 @@ public static class SwaggerConfiguration
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+
+          
         }
         return app;
     }
